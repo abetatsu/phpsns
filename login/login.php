@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 if (!empty($_POST)) {
 
      if ($_POST['name'] === '')
@@ -15,16 +17,21 @@ if (!empty($_POST)) {
      {
           $error['password'] = 'Length';
      }
-     
+
      if ($_POST['password'] === '')
      {
           $error['password'] = 'Blank';
      }
      
      if (empty($error)) {
+          $_SESSION['join'] = $_POST;
           header('Location: check.php');
           exit();
      }
+}
+
+if ($_REQUEST['action'] === 'rewrite' && isset($_SESSION['join'])) {
+     $_POST = $_SESSION['join'];
 }
 ?>
 
@@ -36,7 +43,8 @@ if (!empty($_POST)) {
      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
      <title>phpsns</title>
 </head>
-<body>
+<body class="bg-info">
+     <h1 class="text-white text-center py-4">登録画面</h1>
      <div class="col-sm-6 mx-auto card mt-5">
           <form action="" method="post">
                <div class="form-group">
@@ -66,7 +74,7 @@ if (!empty($_POST)) {
                     <p class="text-danger">* パスワードを入力してください</p>
                     <?php endif; ?>
                </div>
-               <button type="submit" class="btn btn-primary">Submit</button>
+               <button type="submit" class="btn btn-primary">Go To Check</button>
           </form>
      </div>
 </body>
