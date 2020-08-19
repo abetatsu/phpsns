@@ -32,6 +32,12 @@ if (!isset($_SESSION['join'])) {
                     <label for="exampleInputPassword1">Password</label>
                     <p class="text-primary">パスワードは表示されません</p>
                </div>
+               <div class="form-group">
+                    <label for="exampleInputImage1">Image</label><br>
+                    <?php if ($_SESSION['join']['image'] !== ''): ?>
+                         <img src="../member_picture/<?php print(htmlspecialchars($_SESSION['join']['image'], ENT_QUOTES)); ?>">
+                    <?php endif; ?>
+               </div>
                <input type="hidden" name="action" />
                <a href="login.php?action=rewrite" class="btn btn-success">書き直す</a>
                <button type="submit" class="btn btn-primary col-sm-2">Register</button>
