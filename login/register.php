@@ -30,6 +30,16 @@ if (!empty($_POST)) {
                $error['image'] = 'type';
           }
      }
+
+
+     if(empty($error)) {
+          $member = $db->prepare('SELECT COUNT(*) AS cnt FROM members WHERE email=?');
+          $member->execute(array($_POST['email']));
+          $record = $member->fetch();
+          if ($record['cnt'] > 0) {
+               $error['email'] = 'duplicate';
+          }
+     }
      
      if (empty($error)) {
           $image = date('YmdHis' . $_FILES['image']['name']);
@@ -71,7 +81,10 @@ if ($_REQUEST['action'] === 'rewrite' && isset($_SESSION['join'])) {
                     <small id="emailHelp" class="form-text text-danger">required</small>
                     <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value="<?php print(htmlspecialchars($_POST['email'])); ?>">
                     <?php if ($error['email'] === 'Blank'): ?>
-                    <p class="text-danger">* Eメールを入力してください</p>
+                         <p class="text-danger">* Eメールを入力してください</p>
+                    <?php endif; ?>
+                    <?php if ($error['email'] === 'duplicate'): ?>
+                         <p class="text-danger">* 指定されたメールアドレスはすでに登録されています</p>
                     <?php endif; ?>
                </div>
                <div class="form-group">
