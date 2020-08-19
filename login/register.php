@@ -1,5 +1,6 @@
 <?php
 session_start();
+require('../connectDB.php');
 
 if (!empty($_POST)) {
 
