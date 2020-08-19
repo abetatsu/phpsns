@@ -22,9 +22,19 @@ if (!empty($_POST)) {
      {
           $error['password'] = 'Blank';
      }
+     $fileName = $_FILES['image']['name'];
+     if (!empty($fileName)) {
+          $ext = substr($fileName, -3);
+          if ($ext != 'jpg' && $ext != 'png' && $ext != 'gif') {
+               $error['image'] = 'type';
+          }
+     }
      
      if (empty($error)) {
+          $image = date('YmdHis' . $_FILES['image']['name']);
+          move_uploaded_file($_FILES['image']['tmp_name'], '../member_picture/' . $image);
           $_SESSION['join'] = $_POST;
+          $_SESSION['join']['image'] = $image;
           header('Location: check.php');
           exit();
      }
@@ -46,7 +56,7 @@ if ($_REQUEST['action'] === 'rewrite' && isset($_SESSION['join'])) {
 <body class="bg-info">
      <h1 class="text-white text-center py-4">登録画面</h1>
      <div class="col-sm-6 mx-auto card mt-5">
-          <form action="" method="post">
+          <form action="" method="post" enctype="multipart/form-data">
                <div class="form-group">
                     <label for="exampleInputName">Name</label>
                     <small id="nameHelp" class="form-text text-danger">required</small>
@@ -72,6 +82,15 @@ if ($_REQUEST['action'] === 'rewrite' && isset($_SESSION['join'])) {
                     <?php endif; ?>
                     <?php if ($error['password'] === 'Blank'): ?>
                     <p class="text-danger">* パスワードを入力してください</p>
+                    <?php endif; ?>
+               </div>
+               <div class="form-group">
+                    <input type="file" name="image" size="35" value="test">
+                    <?php if ($error['image'] === 'type'): ?>
+                         <p class="text-danger">* .jpg,.png,.gifの画像を指定してください</p>
+                    <?php endif; ?>
+                    <?php if (!empty($error) || $_REQUEST['action'] === 'rewrite'): ?>
+                         <p class="text-danger">* 恐れ入りますが、画像を再度入力してください</p>
                     <?php endif; ?>
                </div>
                <button type="submit" class="btn btn-primary">Go To Check</button>
