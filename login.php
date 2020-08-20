@@ -1,7 +1,14 @@
 <?php
+session_start();
 require('connectDB.php');
 
+if ($_COOKIE['email'] !== '') {
+     $email = $_COOKIE['email'];
+}
+
 if (!empty($_POST)) {
+     
+     $email = $_POST['email'];
 
      if ($_POST['email'] === '')  {
           $error['email'] = 'Blank';
@@ -19,8 +26,13 @@ if (!empty($_POST)) {
      $member = $login->fetch();
 
      if ($member) {
-          $_SESSION['email'] = $_POST['email'];
+          $_SESSION['id'] = $member['id'];
           $_SESSION['time'] = time();
+
+          if ($_POST['save'] === 'on') {
+               setcookie('email', $_POST['email'], time()+60*60*24*14);
+          }
+
           header('Location: index.php');
           exit();
      } else {
@@ -46,7 +58,7 @@ if (!empty($_POST)) {
                <?php endif; ?>
                <div class="form-group">
                     <label for="exampleInputEmail1">Email address</label>
-                    <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email" value="<?php print(htmlspecialchars($_POST['email'])); ?>">
+                    <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email" value="<?php print(htmlspecialchars($email)); ?>">
                     <?php if ($error['email'] === 'Blank'): ?>
                          <p class="text-danger">* Eメールを入力してください</p>
                     <?php endif; ?>
@@ -58,8 +70,9 @@ if (!empty($_POST)) {
                     <p class="text-danger">* パスワードを入力してください</p>
                     <?php endif; ?>
                </div>
+               <input type="checkbox" id="save" name="save" value="on">ログイン情報を保存する<br>
                <button type="submit" class="btn btn-primary">Login</button>
-               <a href="register/register.php">登録する</a>
+               <a href="register/register.php">会員登録する</a>
           </form>
      </div>
 </body>
