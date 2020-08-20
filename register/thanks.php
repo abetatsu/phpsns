@@ -7,6 +7,6 @@
 </head>
 <body class="bg-info">
      <h1 class="text-white text-center my-5">登録が完了しました</h1>
-     <h3 class="text-center"><a href="" class="text-secondary">ログイン画面へ</a></h3>
+     <h3 class="text-center"><a href="../login.php" class="text-secondary">ログイン画面へ</a></h3>
 </body>
 </html>
