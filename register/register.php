@@ -109,6 +109,7 @@ if ($_REQUEST['action'] === 'rewrite' && isset($_SESSION['join'])) {
                </div>
                <button type="submit" class="btn btn-primary">Go To Check</button>
           </form>
+          <a href="../login.php" class="btn btn-secondary col-sm-2 my-2">ログイン</a>
      </div>
 </body>
 </html>
