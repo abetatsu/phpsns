@@ -36,6 +36,7 @@ if (!empty($_POST)) {
 
 $posts = $db->query('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id ORDER BY p.created DESC');
 
+
 if (isset($_REQUEST['res'])) {
      $response = $db->prepare('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id AND p.id=?');
      $response->execute(array($_REQUEST['res']));
@@ -74,6 +75,9 @@ if (isset($_REQUEST['res'])) {
                <p><a href="index.php?res=<?php print(htmlspecialchars($post['id'], ENT_QUOTES)); ?>">返信</a></p>
                <?php if($post['reply_message_id'] > 0): ?>
                     <p><a href="show.php?id=<?php print(htmlspecialchars($post['reply_message_id'], ENT_QUOTES)); ?>" class="text-secondary">返信元のメッセージ</a></p>
+               <?php endif; ?>
+               <?php if($_SESSION['id'] === $post['member_id']): ?>
+               <p><a href="delete.php?id=<?php print(htmlspecialchars($post['id'], ENT_QUOTES)); ?>" class="text-danger" onclick="return confirm('本当に削除しますか?');">削除</a></p>
                <?php endif; ?>
           </div>
      <?php endforeach; ?>
