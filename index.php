@@ -13,6 +13,20 @@ if ($_SESSION['id'] && $_SESSION['time'] + 3600 > time()) {
      exit();
 }
 
+if (!empty($_POST)) {
+     if ($_POST['message'] !== '') {
+          $messages = $db->prepare('INSERT INTO posts SET member_id=?, message=?, created=now()');
+          $messages ->execute(array(
+               $member['id'],
+               $_POST['message']
+          ));
+          $message = $messages->fetch();
+     }
+}
+
+header('Location: index.php');
+exit();
+
 ?>
 
 <!DOCTYPE html>
@@ -31,6 +45,12 @@ if ($_SESSION['id'] && $_SESSION['time'] + 3600 > time()) {
                <textarea name="message" id="" cols="50" rows="10" class="mx-auto"></textarea>
                <input type="submit" value="投稿する" class="btn btn-primary">
           </form>
+     </div>
+     <div>
+          <img src="" alt="">
+          <p><?php  ?></p>
+          <p></p>
+          <p></p>
      </div>
 </body>
 </html>
