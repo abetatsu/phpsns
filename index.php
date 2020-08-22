@@ -70,8 +70,11 @@ if (isset($_REQUEST['res'])) {
                <img src="member_picture/<?php print(htmlspecialchars($post['picture'], ENT_QUOTES)); ?>" alt="<?php print(htmlspecialchars($post['image'], ENT_QUOTES)); ?>" width="48" height="48">
                <p><?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?></p>
                <p><?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?></p>
-               <p><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></p>
-               <a href="index.php?res=<?php print(htmlspecialchars($post['id'], ENT_QUOTES)); ?>">返信</a>
+               <p><a href="show.php?id=<?php print(htmlspecialchars($post['id'], ENT_QUOTES)); ?>"><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></a></p>
+               <p><a href="index.php?res=<?php print(htmlspecialchars($post['id'], ENT_QUOTES)); ?>">返信</a></p>
+               <?php if($post['reply_message_id'] > 0): ?>
+                    <p><a href="show.php?id=<?php print(htmlspecialchars($post['reply_message_id'], ENT_QUOTES)); ?>" class="text-secondary">返信元のメッセージ</a></p>
+               <?php endif; ?>
           </div>
      <?php endforeach; ?>
 </body>
