@@ -1,5 +1,7 @@
 <?php
 session_start();
+// var_dump($_SESSION['join']);
+// var_dump($_POST);
 require('../connectDB.php');
 // ini_set('display_errors', 1);
 

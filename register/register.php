@@ -1,5 +1,18 @@
 <?php
 session_start();
+// $array = session_get_cookie_params();
+// echo "クッキーの生存期間(lifetime) : ", $array['lifetime'],"<br>";
+// echo "情報が保存されている場所のパス(path) : ", $array['path'],"<br>";
+// echo "クッキーのドメイン(domain) : ", $array['domain'],"<br>";
+// echo "クッキーはセキュアな接続でのみ送信(secure) : ", $array['secure'],"<br>";
+// echo "クッキーは HTTP を通してのみアクセス可能(httponly) :", $array['httponly'],"<br>";
+// echo "<br>";
+// echo "セッションチェック: ", $_SESSION['count'],"<br>";
+// echo "現在のセッション名は  ". session_name() ." です。<br>";
+// echo "現在のセッションIDは  ". session_id() ." です。<br>";
+// echo "現在のセッションデータは". session_save_path() ."に保存されています。<br>";
+// var_dump($_SESSION['join']);
+// var_dump($_POST);
 require('../connectDB.php');
 
 if (!empty($_POST)) {
@@ -32,7 +45,7 @@ if (!empty($_POST)) {
      }
 
 
-     if(empty($error)) {
+     if (empty($error)) {
           $member = $db->prepare('SELECT COUNT(*) AS cnt FROM members WHERE email=?');
           $member->execute(array($_POST['email']));
           $record = $member->fetch();
@@ -42,7 +55,7 @@ if (!empty($_POST)) {
      }
      
      if (empty($error)) {
-          $image = date('YmdHis' . $_FILES['image']['name']);
+          $image = date('YmdHis') . $_FILES['image']['name'];
           move_uploaded_file($_FILES['image']['tmp_name'], '../member_picture/' . $image);
           $_SESSION['join'] = $_POST;
           $_SESSION['join']['image'] = $image;
@@ -51,7 +64,7 @@ if (!empty($_POST)) {
      }
 }
 
-if ($_REQUEST['action'] === 'rewrite' && isset($_SESSION['join'])) {
+if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
      $_POST = $_SESSION['join'];
 }
 ?>

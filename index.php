@@ -1,6 +1,6 @@
 <?php
-require('connectDB.php');
 session_start();
+require('connectDB.php');
 
 if ($_SESSION['id'] && $_SESSION['time'] + 3600 > time()) {
      $_SESSION['time'] =time();
@@ -13,6 +13,19 @@ if ($_SESSION['id'] && $_SESSION['time'] + 3600 > time()) {
      exit();
 }
 
+if (!empty($_POST)) {
+     if ($_POST['message'] !== '') {
+          $messages = $db->prepare('INSERT INTO posts SET member_id=?, message=?, reply_message_id=0, created=now()');
+          $messages ->execute(array(
+               $member['id'],
+               $_POST['message']
+          ));
+          header('Location: index.php');
+          exit();
+     }
+}
+
+$posts = $db->query('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id ORDER BY p.created DESC');
 ?>
 
 <!DOCTYPE html>
@@ -32,5 +45,13 @@ if ($_SESSION['id'] && $_SESSION['time'] + 3600 > time()) {
                <input type="submit" value="投稿する" class="btn btn-primary">
           </form>
      </div>
+     <?php foreach($posts as $post): ?>
+     <div class="card col-sm-6 mx-auto my-3 text-left">
+          <img src="member_picture/<?php print(htmlspecialchars($post['picture'], ENT_QUOTES)); ?>" alt="<?php print(htmlspecialchars($post['image'], ENT_QUOTES)); ?>" width="48" height="48">
+          <p><?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?></p>
+          <p><?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?></p>
+          <p><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></p>
+     </div>
+     <?php endforeach; ?>
 </body>
 </html>
