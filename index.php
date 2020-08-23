@@ -34,8 +34,22 @@ if (!empty($_POST)) {
      exit();
 }
 
-$posts = $db->query('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id ORDER BY p.created DESC');
+$page = $_REQUEST['page'];
+if ($page == '') {
+     $page = 1;
+}
+$page = max($page, 1);
 
+$counts = $db->query('SELECT COUNT(*) AS cnt FROM posts');
+$cnt = $counts->fetch();
+$maxPage = ceil($cnt['cnt'] / 5);
+$page = min($page, $maxPage);
+
+$start = ($page - 1) * 5;
+
+$posts = $db->prepare('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id ORDER BY p.created DESC LIMIT ?, 5');
+$posts->bindParam(1, $start, PDO::PARAM_INT);
+$posts->execute();
 
 if (isset($_REQUEST['res'])) {
      $response = $db->prepare('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id AND p.id=?');
@@ -81,6 +95,12 @@ if (isset($_REQUEST['res'])) {
                <?php endif; ?>
           </div>
      <?php endforeach; ?>
+     <?php if($page > 1): ?>
+          <a href="index.php?page=<?php print(htmlspecialchars($page - 1, ENT_QUOTES)); ?>" class="text-white">前のページへ</a>
+     <?php endif; ?>
+     <?php if($page < $maxPage): ?>
+          <a href="index.php?page=<?php print(htmlspecialchars($page + 1, ENT_QUOTES)); ?>" class="text-white">次のページへ</a>
+     <?php endif; ?>
 </body>
 
 </html>
