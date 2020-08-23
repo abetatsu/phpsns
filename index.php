@@ -72,6 +72,7 @@ if (isset($_REQUEST['res'])) {
 
 <body class="bg-info text-center">
      <h1 class="text-white my-5">投稿画面</h1>
+     <button class="btn btn-secondary"><a href="logout.php" class="text-white">ログアウト</a></button>
      <div class="card mx-auto col-sm-6 my-5">
           <h3 class="my-3"><?php print(htmlspecialchars($member['name'], ENT_QUOTES)); ?>さん、今起こっていることを伝えよう！</h3>
           <form action="" method="post">
